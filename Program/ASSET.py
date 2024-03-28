@@ -22,7 +22,6 @@ IMAGE_LIST = []
 NAME_LIST = ["Google", "Bing", "Discord Servers"]
 NAME_LIST += ["Default"] * (NUM_ENGINES - len(NAME_LIST))
 
-query = ""
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -30,7 +29,7 @@ class App(customtkinter.CTk):
         # load images list
         for i in range(NUM_ENGINES):
             image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
-            IMAGE_LIST.append(customtkinter.CTkImage(Image.open(os.path.join(image_path, IMAGE_LOAD_LIST[i]))))
+            IMAGE_LIST.append(customtkinter.CTkImage(Image.open(os.path.join(image_path, IMAGE_LOAD_LIST[i])), size=(48, 48)))
 
         # configure window
         self.title("ASSET prototype")
@@ -56,7 +55,7 @@ class App(customtkinter.CTk):
 
         # render each viewport
 
-        self.search_results(query)
+        self.search_results("")
 
     def search_results(self,query):
         # Clear previous results
