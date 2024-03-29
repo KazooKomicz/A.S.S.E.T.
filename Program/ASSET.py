@@ -10,8 +10,7 @@ from bs4 import BeautifulSoup
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
-NUM_ENGINES = 4
-
+NUM_ENGINES = 10
 SEARCH_LIST = ["Google.com", "Bing.com", "Discord.com/servers"]
 SEARCH_LIST += [None] * (NUM_ENGINES - len(SEARCH_LIST))
 
@@ -99,7 +98,7 @@ class App(customtkinter.CTk):
         }
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')
-        results = soup.find_all('h3')  # Assuming search results are under <h3> tags
+        results = soup.find_all('a')  # Assuming search results are under <h3> tags
         return [result.text for result in results]
 
 if __name__ == "__main__":
