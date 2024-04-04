@@ -8,7 +8,6 @@ from PIL import Image
 import requests
 from bs4 import BeautifulSoup
 import keyboard
-from time import sleep
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -23,7 +22,6 @@ IMAGE_LIST = []
 
 NAME_LIST = ["Google", "Bing", "Discord Servers"]
 NAME_LIST += ["Default"] * (NUM_ENGINES - len(NAME_LIST))
-
 
 
 class App(customtkinter.CTk):
@@ -92,6 +90,23 @@ class App(customtkinter.CTk):
     def press_search(self):
         print(self.entry.get())
         self.search_results(self.entry.get())
+    def button_Mode(self, mode):
+        if(mode == 0):
+            customtkinter.set_appearance_mode("Light")
+        elif(mode == 1):
+            customtkinter.set_appearance_mode("Dark")
+        elif(mode == 2):
+            customtkinter.set_appearance_mode("System")
+
+    #Engine Functions
+    def add_Engine(self):
+        self.NUM_ENGINES += 1
+    def remove_Engine(self):
+        self.NUM_ENGINES -= 1
+    def set_Engine(self, name, site, picture, location):
+        self.SEARCH_LIST.append(site,location)
+        self.IMAGE_LOAD_LIST.append(picture, location)
+        self.NAME_LIST.append(name, location)
 
     # The Search Engines
 
