@@ -3,9 +3,12 @@ import tkinter.messagebox
 from typing import List
 import customtkinter
 import os
+import re
 from PIL import Image
 import requests
 from bs4 import BeautifulSoup
+import keyboard
+from time import sleep
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -20,6 +23,8 @@ IMAGE_LIST = []
 
 NAME_LIST = ["Google", "Bing", "Discord Servers"]
 NAME_LIST += ["Default"] * (NUM_ENGINES - len(NAME_LIST))
+
+
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -55,6 +60,7 @@ class App(customtkinter.CTk):
         # render each viewport
 
         self.search_results("")
+        keyboard.add_hotkey('enter', lambda: self.press_search())
 
     def search_results(self,query):
         # Clear previous results
@@ -71,11 +77,10 @@ class App(customtkinter.CTk):
             #
             if(SEARCH_LIST[i] != None):
                 results = self.search(f"https://www.{SEARCH_LIST[i]}/search?q=",query)
+            else:
+                results = ["result", "result", "result"]
             viewport.configure(label_text= NAME_LIST[i])
             image.configure(image=IMAGE_LIST[i])
-
-            if (query == ""):
-                results = ["result", "result", "result"]
 
             #Loop to give results
             for j, result_text in enumerate(results):
@@ -83,7 +88,6 @@ class App(customtkinter.CTk):
                 result.grid(row=j, column=0, padx=0, pady=0, sticky="w")
 
         # Search button is clicked, allows for update to any engine list
-
     # Search Button
     def press_search(self):
         print(self.entry.get())
@@ -98,7 +102,10 @@ class App(customtkinter.CTk):
         }
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')
-        results = soup.find_all('a')  # Assuming search results are under <h3> tags
+        results = soup.find_all(string=re.compile(query))  # Assuming search results are under <h3> tags
+        for result in results:
+            if result.getText() == "":
+                results.remove(result)
         return [result.text for result in results]
 
 if __name__ == "__main__":
