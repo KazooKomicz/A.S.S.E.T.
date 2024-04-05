@@ -12,6 +12,17 @@ import keyboard
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
+NUM_ENGINES = 4
+SEARCH_LIST = ["Google.com", "Bing.com", "Discord.com/servers"]
+SEARCH_LIST += [None] * (NUM_ENGINES - len(SEARCH_LIST))
+
+IMAGE_LOAD_LIST = ["google.png", "bing.png"]
+IMAGE_LOAD_LIST += ["image_icon_light.png"] * (NUM_ENGINES - len(IMAGE_LOAD_LIST))
+IMAGE_LIST = []
+
+NAME_LIST = ["Google", "Bing", "Discord Servers"]
+NAME_LIST += ["Default"] * (NUM_ENGINES - len(NAME_LIST))
+
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -88,15 +99,18 @@ class App(customtkinter.CTk):
 
             #Loop to give results
             for j, result_text in enumerate(results):
-                result = customtkinter.CTkLabel(master=viewport, text=f"{j} - {result_text}\n", anchor= "nw", wraplength=250)
+                result = customtkinter.CTkLabel(master=viewport, text=f"{j} - {result_text}\n", anchor= "nw", wraplength=round(self.winfo_width()/NUM_ENGINES-80))
                 result.grid(row=j, column=0, padx=0, pady=0, sticky="w")
+                print(round(self.winfo_width()/NUM_ENGINES-80))
 
         # Search button is clicked, allows for update to any engine list
+
     # Search Button
     def press_search(self):
         print(self.entry.get())
         self.search_results(self.entry.get())
     # Changes Mode & Themes
+
     def button_Mode(self, mode):
         if(mode == 0):
             customtkinter.set_appearance_mode("Light")
@@ -121,10 +135,18 @@ class App(customtkinter.CTk):
     def add_Engine(self):
         self.set_Engine("Default","google.com", "image_icon_light.png")
         self.NUM_ENGINES += 1
+
         self.search_results("")
     def remove_Engine(self):
         self.NUM_ENGINES -= 1
 
+    def remove_Engine(self):
+        self.NUM_ENGINES -= 1
+
+    def set_Engine(self, name, site, picture):
+        self.SEARCH_LIST.append(site)
+        self.IMAGE_LOAD_LIST.append(picture)
+        self.NAME_LIST.append(name)
 
     # The Search Engines
 
