@@ -88,9 +88,9 @@ class App(customtkinter.CTk):
 
             #Loop to give results
             for j, result_text in enumerate(results):
-                result = customtkinter.CTkLabel(master=viewport, text=f"{j} - {result_text}\n", anchor= "nw", wraplength=round(self.winfo_width()/self.NUM_ENGINES-80))
+                result = customtkinter.CTkLabel(master=viewport, text=f"{j} - {result_text}\n", anchor= "nw", wraplength=round(self.winfo_width()/self.NUM_ENGINES*0.7))
                 result.grid(row=j, column=0, padx=0, pady=0, sticky="w")
-                print(round(self.winfo_width()/self.NUM_ENGINES-80))
+                #print(round(self.winfo_width()/self.NUM_ENGINES*0.7))
 
         # Search button is clicked, allows for update to any engine list
 
