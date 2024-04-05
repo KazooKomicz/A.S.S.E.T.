@@ -29,9 +29,17 @@ class App(customtkinter.CTk):
         self.NAME_LIST += ["Default"] * (self.NUM_ENGINES - len(self.NAME_LIST))
 
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
+
+        def load_image(file_name, size):
+            return customtkinter.CTkImage(Image.open(os.path.join(image_path, file_name)), size=(size, size))
+        
         # load images list
         for i in range(self.NUM_ENGINES):
-            self.IMAGE_LIST.append(customtkinter.CTkImage(Image.open(os.path.join(image_path, self.IMAGE_LOAD_LIST[i])), size=(48, 48)))
+            self.IMAGE_LIST.append(load_image(self.IMAGE_LOAD_LIST[i], 48))
+
+        # load plus and minus buttons
+            plus_image = load_image("plus.png", 32)
+            minus_image = load_image("minus.png", 32)
 
         # configure window
         self.title("ASSET prototype")
@@ -41,25 +49,30 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure(1, weight=1)
+        column_width = 5
         
         # load search bar
         self.entry = customtkinter.CTkEntry(self, placeholder_text="search query")
         self.entry.grid(row=0, column=0, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
-        # load frame
-        self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.home_frame.grid(row=0, column=2, padx=0, pady=0, sticky="nsew")
-        # load button
-        self.main_button_1 = customtkinter.CTkButton(master=self, fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), text="search button", command=self.press_search)
-        self.main_button_1.grid(row=0, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        # search button
+        self.search_button = customtkinter.CTkButton(master=self, fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), text="search button", command=self.press_search)
+        self.search_button.grid(row=0, column=4, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
-        self.home_frame_button_2 = customtkinter.CTkButton(self.home_frame, text=" ", image=self.IMAGE_LIST[0], command = self.add_Engine)
-        self.home_frame_button_2.grid(row=0, column=2, padx=0, pady=0, sticky="nsew")
+        # add engine button
+        self.add_engine_button = customtkinter.CTkButton(self, fg_color="transparent", text="add", image=plus_image, command = self.add_Engine)
+        self.add_engine_button.grid(row=0, column=2, padx=0, pady=0, sticky="nsew")
+
+        # remove engine button
+        self.add_engine_button = customtkinter.CTkButton(self, fg_color="transparent", text="remove", image=minus_image, command = self.remove_Engine)
+        self.add_engine_button.grid(row=0, column=3, padx=0, pady=0, sticky="nsew")
 
         # viewports container
         self.viewports_container = customtkinter.CTkFrame(self)
-        self.viewports_container.grid(row=1, column=0, columnspan=4, padx=0, pady=0, sticky="nsew")
+        self.viewports_container.grid(row=1, column=0, columnspan=column_width, padx=0, pady=0, sticky="nsew")
         self.viewports_container.rowconfigure(1, weight=1)
+        # for i in range(column_width):
+        #     self.viewports_container.columnconfigure(i, weight=1)
 
         # render each viewport
 
@@ -78,7 +91,6 @@ class App(customtkinter.CTk):
             image = customtkinter.CTkLabel(self.viewports_container, text="", image=self.IMAGE_LIST[0])
             image.grid(row=0, column=i, padx=0, pady=0, sticky="nsew")
 
-            #
             if(self.SEARCH_LIST[i] != None):
                 results = self.search(f"https://www.{self.SEARCH_LIST[i]}/search?q=",query)
             else:
@@ -121,13 +133,15 @@ class App(customtkinter.CTk):
         self.SEARCH_LIST.append(site)
         self.IMAGE_LIST.append(customtkinter.CTkImage(Image.open(os.path.join(image_path, picture)), size=(48, 48)))
         self.NAME_LIST.append(name)
+
     def add_Engine(self):
         self.set_Engine("Default","google.com", "image_icon_light.png")
         self.NUM_ENGINES += 1
+        self.search_results(self.entry.get())
 
-        self.search_results("")
     def remove_Engine(self):
         self.NUM_ENGINES -= 1
+        self.search_results(self.entry.get())
 
     # The Search Engines
 
