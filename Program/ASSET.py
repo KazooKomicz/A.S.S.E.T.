@@ -16,7 +16,7 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.NUM_ENGINES = 10
+        self.NUM_ENGINES = 5
 
         self.SEARCH_LIST = ["Google.com", "Bing.com", "Discord.com/servers"]
         self.SEARCH_LIST += [None] * (self.NUM_ENGINES - len(self.SEARCH_LIST))
@@ -137,7 +137,7 @@ class App(customtkinter.CTk):
         soup = BeautifulSoup(response.text, 'html.parser')
         results = soup.find_all(string=re.compile(query))  # Assuming search results are under <h3> tags
         for result in results:
-            if result.getText() == "":
+            if result.getText() == "" or result.getText() == None or result.getText() == query:
                 results.remove(result)
         return [result.text for result in results]
 
