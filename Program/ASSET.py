@@ -12,26 +12,26 @@ import keyboard
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
-NUM_ENGINES = 10
-SEARCH_LIST = ["Google.com", "Bing.com", "Discord.com/servers"]
-SEARCH_LIST += [None] * (NUM_ENGINES - len(SEARCH_LIST))
-
-IMAGE_LOAD_LIST = ["google.png", "bing.png"]
-IMAGE_LOAD_LIST += ["image_icon_light.png"] * (NUM_ENGINES - len(IMAGE_LOAD_LIST))
-IMAGE_LIST = []
-
-NAME_LIST = ["Google", "Bing", "Discord Servers"]
-NAME_LIST += ["Default"] * (NUM_ENGINES - len(NAME_LIST))
-
-
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
+        self.NUM_ENGINES = 10
+
+        self.SEARCH_LIST = ["Google.com", "Bing.com", "Discord.com/servers"]
+        self.SEARCH_LIST += [None] * (self.NUM_ENGINES - len(self.SEARCH_LIST))
+
+        self.IMAGE_LOAD_LIST = ["google.png", "bing.png"]
+        self.IMAGE_LOAD_LIST += ["image_icon_light.png"] * (self.NUM_ENGINES - len(self.IMAGE_LOAD_LIST))
+        self.IMAGE_LIST = []
+
+        self.NAME_LIST = ["Google", "Bing", "Discord Servers"]
+        self.NAME_LIST += ["Default"] * (self.NUM_ENGINES - len(self.NAME_LIST))
+
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
         # load images list
-        for i in range(NUM_ENGINES):
-            IMAGE_LIST.append(customtkinter.CTkImage(Image.open(os.path.join(image_path, IMAGE_LOAD_LIST[i])), size=(48, 48)))
+        for i in range(self.NUM_ENGINES):
+            self.IMAGE_LIST.append(customtkinter.CTkImage(Image.open(os.path.join(image_path, self.IMAGE_LOAD_LIST[i])), size=(48, 48)))
 
         # configure window
         self.title("ASSET prototype")
@@ -53,7 +53,7 @@ class App(customtkinter.CTk):
         self.main_button_1 = customtkinter.CTkButton(master=self, fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), text="search button", command=self.press_search)
         self.main_button_1.grid(row=0, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
-        self.home_frame_button_2 = customtkinter.CTkButton(self.home_frame, text=" ", image=IMAGE_LIST[0])
+        self.home_frame_button_2 = customtkinter.CTkButton(self.home_frame, text=" ", image=self.IMAGE_LIST[0], command = self.add_Engine)
         self.home_frame_button_2.grid(row=0, column=2, padx=0, pady=0, sticky="nsew")
 
         # viewports container
@@ -71,20 +71,20 @@ class App(customtkinter.CTk):
         for widget in self.viewports_container.grid_slaves():
             widget.grid_forget()
 
-        for i in range(NUM_ENGINES):
+        for i in range(self.NUM_ENGINES):
             self.viewports_container.columnconfigure(i, weight=1)
             viewport = customtkinter.CTkScrollableFrame(self.viewports_container, label_text="viewport")
             viewport.grid(row=1, column=i, padx=0, pady=0, sticky="nsew")
-            image = customtkinter.CTkLabel(self.viewports_container, text="", image=IMAGE_LIST[0])
+            image = customtkinter.CTkLabel(self.viewports_container, text="", image=self.IMAGE_LIST[0])
             image.grid(row=0, column=i, padx=0, pady=0, sticky="nsew")
 
             #
-            if(SEARCH_LIST[i] != None):
-                results = self.search(f"https://www.{SEARCH_LIST[i]}/search?q=",query)
+            if(self.SEARCH_LIST[i] != None):
+                results = self.search(f"https://www.{self.SEARCH_LIST[i]}/search?q=",query)
             else:
                 results = ["result", "result", "result"]
-            viewport.configure(label_text= NAME_LIST[i])
-            image.configure(image=IMAGE_LIST[i])
+            viewport.configure(label_text= self.NAME_LIST[i])
+            image.configure(image=self.IMAGE_LIST[i])
 
             #Loop to give results
             for j, result_text in enumerate(results):
@@ -112,14 +112,19 @@ class App(customtkinter.CTk):
         elif (theme == 2):
             customtkinter.set_default_color_theme("dark-blue")
     #Engine Functions
+
+    def set_Engine(self, name, site, picture):
+        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
+        self.SEARCH_LIST.append(site)
+        self.IMAGE_LIST.append(customtkinter.CTkImage(Image.open(os.path.join(image_path, picture)), size=(48, 48)))
+        self.NAME_LIST.append(name)
     def add_Engine(self):
+        self.set_Engine("Default","google.com", "image_icon_light.png")
         self.NUM_ENGINES += 1
+        self.search_results("")
     def remove_Engine(self):
         self.NUM_ENGINES -= 1
-    def set_Engine(self, name, site, picture, location):
-        self.SEARCH_LIST.append(site,location)
-        self.IMAGE_LOAD_LIST.append(picture, location)
-        self.NAME_LIST.append(name, location)
+
 
     # The Search Engines
 
