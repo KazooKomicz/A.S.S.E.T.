@@ -28,9 +28,9 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
+        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
         # load images list
         for i in range(NUM_ENGINES):
-            image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
             IMAGE_LIST.append(customtkinter.CTkImage(Image.open(os.path.join(image_path, IMAGE_LOAD_LIST[i])), size=(48, 48)))
 
         # configure window
@@ -44,11 +44,17 @@ class App(customtkinter.CTk):
         
         # load search bar
         self.entry = customtkinter.CTkEntry(self, placeholder_text="search query")
-        self.entry.grid(row=0, column=0, columnspan=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        self.entry.grid(row=0, column=0, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
+        # load frame
+        self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.home_frame.grid(row=0, column=2, padx=0, pady=0, sticky="nsew")
         # load button
         self.main_button_1 = customtkinter.CTkButton(master=self, fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), text="search button", command=self.press_search)
         self.main_button_1.grid(row=0, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
+
+        self.home_frame_button_2 = customtkinter.CTkButton(self.home_frame, text=" ", image=IMAGE_LIST[0])
+        self.home_frame_button_2.grid(row=0, column=2, padx=0, pady=0, sticky="nsew")
 
         # viewports container
         self.viewports_container = customtkinter.CTkFrame(self)
@@ -90,6 +96,7 @@ class App(customtkinter.CTk):
     def press_search(self):
         print(self.entry.get())
         self.search_results(self.entry.get())
+    # Changes Mode & Themes
     def button_Mode(self, mode):
         if(mode == 0):
             customtkinter.set_appearance_mode("Light")
@@ -97,7 +104,13 @@ class App(customtkinter.CTk):
             customtkinter.set_appearance_mode("Dark")
         elif(mode == 2):
             customtkinter.set_appearance_mode("System")
-
+    def button_Theme(self, theme):
+        if (theme == 0):
+            customtkinter.set_default_color_theme("blue")
+        elif (theme == 1):
+            customtkinter.set_default_color_theme("green")
+        elif (theme == 2):
+            customtkinter.set_default_color_theme("dark-blue")
     #Engine Functions
     def add_Engine(self):
         self.NUM_ENGINES += 1
