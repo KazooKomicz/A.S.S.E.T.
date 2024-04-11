@@ -8,9 +8,13 @@ from PIL import Image
 import requests
 from bs4 import BeautifulSoup
 import keyboard
+import webbrowser
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+
+def underline_on_hover_callback(event, bool):
+    event.widget.configure(font=customtkinter.CTkFont(underline=bool, size=16))
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -101,6 +105,9 @@ class App(customtkinter.CTk):
             #Loop to give results
             for j, result_text in enumerate(results):
                 result = customtkinter.CTkLabel(master=viewport, text=f"{j} - {result_text}\n", anchor= "nw", wraplength=round(self.winfo_width()/self.NUM_ENGINES*0.7))
+                result.bind("<Button-1>", lambda e:webbrowser.open_new_tab("www.google.com"))
+                result.bind("<Enter>", lambda e:underline_on_hover_callback(e, True))
+                result.bind("<Leave>", lambda e:underline_on_hover_callback(e, False))
                 result.grid(row=j, column=0, padx=0, pady=0, sticky="w")
                 #print(round(self.winfo_width()/self.NUM_ENGINES*0.7))
 
