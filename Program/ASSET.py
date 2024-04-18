@@ -9,6 +9,7 @@ import requests
 from bs4 import BeautifulSoup
 import keyboard
 import webbrowser
+from idlelib.tooltip import Hovertip
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -121,6 +122,7 @@ class App(customtkinter.CTk):
             #Loop to give results
             for j, result_text in enumerate(results):
                 result = CustomLabel(master=viewport, text=f"{j} - {result_text[0]}\n", anchor= "nw", wraplength=round(self.winfo_width()/self.NUM_ENGINES*0.7), link=result_text[1])
+                preview = Hovertip(result, result.link, hover_delay=0)
                 result.grid(row=j, column=0, padx=0, pady=0, sticky="w")
 
         # Search button is clicked, allows for update to any engine list
@@ -159,6 +161,7 @@ class App(customtkinter.CTk):
         self.search_results(self.entry.get())
 
     def remove_Engine(self):
+        # Need to pop engine info from the lists
         self.NUM_ENGINES -= 1
         self.search_results(self.entry.get())
 
