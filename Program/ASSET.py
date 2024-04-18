@@ -49,6 +49,8 @@ class App(customtkinter.CTk):
         self.NAME_LIST = ["Google", "Bing", "Discord Servers"]
         self.NAME_LIST += ["Default"] * (self.NUM_ENGINES - len(self.NAME_LIST))
 
+        self.OPTIONS = []
+
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
 
         def load_image(file_name, size):
@@ -90,16 +92,15 @@ class App(customtkinter.CTk):
 
         # options container
         self.options_container = customtkinter.CTkFrame(self)
-        self.options_container.grid(row=1, column=1, columnspan=2, padx=0, pady=10, sticky="nsew")
+        self.options_container.grid(row=1, column=1, columnspan=2, padx=0, pady=0, sticky="nsew")
         self.options_container.rowconfigure(1, weight=1)
 
         for i in range(self.NUM_ENGINES):
             self.options_container.columnconfigure(i, weight=0)
 
-            self.option_menu_1 = customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
-                                                       values=["Default", "Google", "Bing", "Discord"])
-
-            self.option_menu_1.grid(row=0, column=i, padx=(10,10), pady=(10, 10))
+            self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
+                                                       values=["Default", "Google", "Bing", "Discord"]))
+            self.OPTIONS[i].grid(row=0, column=i, padx=(10,10), pady=(10, 10))
 
         # viewports container
         self.viewports_container = customtkinter.CTkFrame(self)
@@ -144,7 +145,7 @@ class App(customtkinter.CTk):
             image = customtkinter.CTkLabel(self.viewports_container, text="", image=self.IMAGE_LIST[0])
             image.grid(row=0, column=i, padx=0, pady=0, sticky="nsew")
 
-            self.spec_Engine(i, self.NAME_LIST[i])
+            self.spec_Engine(i, self.OPTIONS[i].get())
 
             if(self.SEARCH_LIST[i] != None):
                 results = self.search(f"https://www.{self.SEARCH_LIST[i]}/search?q=",query)
