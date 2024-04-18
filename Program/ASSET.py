@@ -71,7 +71,8 @@ class App(customtkinter.CTk):
         # configure grid layout
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=0)
-        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(1, weight=0)
+        self.grid_rowconfigure(2, weight=1)
         column_width = 5
         
         # load search bar
@@ -92,15 +93,15 @@ class App(customtkinter.CTk):
 
         # options container
         self.options_container = customtkinter.CTkFrame(self)
-        self.options_container.grid(row=1, column=1, columnspan=2, padx=0, pady=0, sticky="nsew")
-        self.options_container.rowconfigure(1, weight=1)
+        self.options_container.grid(row=1, column=1, columnspan=4, padx=0, pady=0, sticky="nsew")
+        self.options_container.rowconfigure(1, weight=0)
 
         for i in range(self.NUM_ENGINES):
             self.options_container.columnconfigure(i, weight=0)
 
             self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
                                                        values=["Default", "Google", "Bing", "Discord"]))
-            self.OPTIONS[i].grid(row=0, column=i, padx=(10,10), pady=(10, 10))
+            self.OPTIONS[i].grid(row=0, column=i, padx=(40,40), pady=(10, 10))
 
         # viewports container
         self.viewports_container = customtkinter.CTkFrame(self)
@@ -191,8 +192,11 @@ class App(customtkinter.CTk):
         self.NAME_LIST.append(name)
 
     def add_Engine(self):
-        self.set_Engine("Default","google.com", "image_icon_light.png")
         self.NUM_ENGINES += 1
+        self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
+                                                       values=["Default", "Google", "Bing", "Discord"]))
+        ##self.OPTIONS[self.NUM_ENGINES].grid(row=0, column=self.NUM_ENGINES, padx=(10, 10), pady=(10, 10))
+        self.set_Engine("Default","google.com", "image_icon_light.png")
         self.search_results(self.entry.get())
 
     def remove_Engine(self):
