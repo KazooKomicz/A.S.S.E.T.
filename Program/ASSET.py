@@ -87,20 +87,52 @@ class App(customtkinter.CTk):
         self.add_engine_button = customtkinter.CTkButton(self, fg_color="transparent", text="remove", image=minus_image, command = self.remove_Engine)
         self.add_engine_button.grid(row=0, column=3, padx=0, pady=0, sticky="nsew")
 
+        # options container
+        self.options_container = customtkinter.CTkFrame(self)
+        self.options_container.grid(row=1, column=1, columnspan=2, padx=0, pady=10, sticky="nsew")
+        self.options_container.rowconfigure(1, weight=1)
+
+        for i in range(self.NUM_ENGINES):
+            self.options_container.columnconfigure(i, weight=0)
+
+            self.option_menu_1 = customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
+                                                       values=["Default", "Google", "Bing", "Discord"])
+
+            self.option_menu_1.grid(row=0, column=i, padx=(10,10), pady=(10, 10))
+
         # viewports container
         self.viewports_container = customtkinter.CTkFrame(self)
-        self.viewports_container.grid(row=1, column=0, columnspan=column_width, padx=0, pady=0, sticky="nsew")
+        self.viewports_container.grid(row=2, column=0, columnspan=column_width, padx=0, pady=0, sticky="nsew")
         self.viewports_container.rowconfigure(1, weight=1)
         # for i in range(column_width):
         #     self.viewports_container.columnconfigure(i, weight=1)
 
         # render each viewport
-
         self.search_results("")
         keyboard.add_hotkey('enter', lambda: self.press_search())
 
+    def spec_Engine(self, index, name):
+        picture = ""
+        site = ""
+        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
+        self.NAME_LIST[index] = name
+        if(name == "Google"):
+            picture = "google.png"
+            site = "google.com"
+        elif(name == "Bing"):
+            picture = "bing.png"
+            site = "bing.com"
+        elif(name == "Discord"):
+            picture = "image_icon_light.png"
+            site = "discord.com/servers"
+        else:
+            picture = "image_icon_light.png"
+            site = "google.com"
+        self.SEARCH_LIST[index] = site
+        self.IMAGE_LIST[index] = customtkinter.CTkImage(Image.open(os.path.join(image_path, picture)), size=(48, 48))
+
     def search_results(self,query):
-        # Clear previous results
+        ##Clear previous results
         for widget in self.viewports_container.grid_slaves():
             widget.grid_forget()
 
@@ -111,11 +143,13 @@ class App(customtkinter.CTk):
             image = customtkinter.CTkLabel(self.viewports_container, text="", image=self.IMAGE_LIST[0])
             image.grid(row=0, column=i, padx=0, pady=0, sticky="nsew")
 
+            self.spec_Engine(i, self.NAME_LIST[i])
+
             if(self.SEARCH_LIST[i] != None):
                 results = self.search(f"https://www.{self.SEARCH_LIST[i]}/search?q=",query)
             else:
                 results = ["result", "result", "result"]
-            viewport.configure(label_text= self.NAME_LIST[i])
+            viewport.configure(label_text=self.NAME_LIST[i])
             image.configure(image=self.IMAGE_LIST[i])
 
             #Loop to give results
