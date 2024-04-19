@@ -100,8 +100,9 @@ class App(customtkinter.CTk):
             self.options_container.columnconfigure(i, weight=0)
 
             self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
-                                                       values=["Default", "Google", "Bing", "Discord"]))
+                                                       values=["Google", "Bing", "Discord", "DuckDuckGo", "Reddit"]))
             self.OPTIONS[i].grid(row=0, column=i, padx=(40,40), pady=(10, 10))
+            self.OPTIONS[i].set("Menu")
 
         # viewports container
         self.viewports_container = customtkinter.CTkFrame(self)
@@ -128,9 +129,15 @@ class App(customtkinter.CTk):
         elif(name == "Discord"):
             picture = "image_icon_light.png"
             site = "discord.com/servers"
+        elif (name == "DuckDuckGo"):
+            picture = "image_icon_light.png"
+            site = "duckduckgo.com"
+        elif (name == "Reddit"):
+            picture = "image_icon_light.png"
+            site = "reddit.com"
         else:
             picture = "image_icon_light.png"
-            site = "google.com"
+            site = "theuselessweb.com"
         self.SEARCH_LIST[index] = site
         self.IMAGE_LIST[index] = customtkinter.CTkImage(Image.open(os.path.join(image_path, picture)), size=(48, 48))
 
@@ -148,7 +155,7 @@ class App(customtkinter.CTk):
 
             self.spec_Engine(i, self.OPTIONS[i].get())
 
-            if(self.SEARCH_LIST[i] != None):
+            if(self.SEARCH_LIST[i] != "Menu"):
                 results = self.search(f"https://www.{self.SEARCH_LIST[i]}/search?q=",query)
             else:
                 results = ["result", "result", "result"]
@@ -184,7 +191,11 @@ class App(customtkinter.CTk):
         elif (theme == 2):
             customtkinter.set_default_color_theme("dark-blue")
     #Engine Functions
-
+    def update_Options(self):
+        self.options_container.columnconfigure(self.NUM_ENGINES, weight=0)
+        self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
+                                                       values=["Default", "Google", "Bing", "Discord"]))
+        self.OPTIONS[range(self.NUM_ENGINES)].grid(row=0, column=range(self.NUM_ENGINES), padx=(40,40), pady=(10, 10))
     def set_Engine(self, name, site, picture):
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
         self.SEARCH_LIST.append(site)
@@ -193,10 +204,8 @@ class App(customtkinter.CTk):
 
     def add_Engine(self):
         self.NUM_ENGINES += 1
-        self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
-                                                       values=["Default", "Google", "Bing", "Discord"]))
-        ##self.OPTIONS[self.NUM_ENGINES].grid(row=0, column=self.NUM_ENGINES, padx=(10, 10), pady=(10, 10))
         self.set_Engine("Default","google.com", "image_icon_light.png")
+        self.update_Options();
         self.search_results(self.entry.get())
 
     def remove_Engine(self):
