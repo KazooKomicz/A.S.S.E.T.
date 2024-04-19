@@ -151,7 +151,7 @@ class App(customtkinter.CTk):
             image.grid(row=0, column=i, padx=0, pady=0, sticky="nsew")
 
             self.spec_Engine(i, self.OPTIONS[i].get())
-            #self.OPTIONS[i].grid(row=0, column=i, padx=(40, 40), pady=(10, 10))
+            self.update_Options()
 
             if(self.SEARCH_LIST[i] != None):
                 results = self.search(self.SEARCH_LIST[i],query)
@@ -190,11 +190,11 @@ class App(customtkinter.CTk):
             customtkinter.set_default_color_theme("dark-blue")
     #Engine Functions
     def update_Options(self):
-        for widget in self.viewports_options_container.grid_slaves():
+        for widget in self.options_container.grid_slaves():
             widget.grid_forget()
         for i in range(self.NUM_ENGINES):
             self.options_container.columnconfigure(i, weight=0)
-            self.OPTIONS[i].grid(row=0, column=i, padx=(40, 40), pady=(10, 10))
+            self.OPTIONS[i].grid(row=0, column=i, padx=0, pady=0)
         self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
                                                        values=["Google", "Bing", "Discord", "Reddit"]))
 
