@@ -149,7 +149,7 @@ class App(customtkinter.CTk):
             self.spec_Engine(i, self.OPTIONS[i].get())
 
             if(self.SEARCH_LIST[i] != None):
-                results = self.search(f"https://www.{self.SEARCH_LIST[i]}/search?q=",query)
+                results = self.search(self.SEARCH_LIST[i],query)
             else:
                 results = ["result", "result", "result"]
             viewport.configure(label_text=self.NAME_LIST[i])
@@ -207,21 +207,18 @@ class App(customtkinter.CTk):
     # The Search Engines
 
     def search(self, engine, query):
-        url = f"{engine}{query}"
+        url = f"https://www.{engine}/search?q={query}"
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
         }
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')
-        # results = soup.find_all(string=re.compile(query))  # Assuming search results are under <h3> tags
-        # for result in results:
-        #     if result.getText() == "" or result.getText() == None or result.getText() == query:
-        #         results.remove(result)
-        # return [result.text for result in results]
         results = []
         for link in soup.find_all('a', href=True):
             title = link.text.strip()
             href = link['href']
+            if href.startswith("/") and not href.startswith("//"):
+                href = engine+href
             if title and href:
                 results.append([title, href])
         return results
