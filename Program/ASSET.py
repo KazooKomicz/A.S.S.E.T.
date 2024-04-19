@@ -50,7 +50,7 @@ class App(customtkinter.CTk):
         self.NAME_LIST += ["Default"] * (self.NUM_ENGINES - len(self.NAME_LIST))
 
         self.OPTIONS = []
-        self.optionf = ["Google", "Bing", "Discord", "Reddit"]
+        self.optionf = ["Google", "Bing", "Discord", "Reddit", "Thesaurus"]
 
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
 
@@ -133,6 +133,9 @@ class App(customtkinter.CTk):
         elif(name == "Reddit"):
             picture = "reddit.png"
             site = "reddit.com"
+        elif(name == "Thesaurus"):
+            picture = "merriam-webster.png"
+            site = "merriam-webster.com"
         else:
             picture = "image_icon_light.png"
             site = "theuselessweb.com"
@@ -196,7 +199,6 @@ class App(customtkinter.CTk):
         for i in range(self.NUM_ENGINES):
             self.options_container.columnconfigure(i, weight=0)
             self.OPTIONS[i].grid(row=0, column=i, padx=0, pady=0)
-            self.OPTIONS[i].set("Menu")
         self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
                                                        values= self.optionf))
 
@@ -226,6 +228,8 @@ class App(customtkinter.CTk):
         print(engine)
         if engine == "discord.com":
             url = f"https://www.{engine}/servers?query={query}"
+        elif engine == "merriam-webster.com":
+            url = f"https://www.{engine}/thesaurus/{query}"
         else:
             url = f"https://www.{engine}/search?q={query}"
         headers = {
@@ -234,9 +238,15 @@ class App(customtkinter.CTk):
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')
         results = []
+        i = -1
         for link in soup.find_all('a', href=True):
+            i += 1
+            if engine == "merriam-webster.com" and i < 26:
+                continue
             title = link.text.strip()
             href = link['href']
+            if href.startswith("#"):
+                continue
             if href.startswith("/") and not href.startswith("//"):
                 href = engine+href
             if title and href:
