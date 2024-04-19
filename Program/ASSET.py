@@ -39,7 +39,7 @@ class App(customtkinter.CTk):
 
         self.NUM_ENGINES = 5
 
-        self.SEARCH_LIST = ["Google.com", "Bing.com", "Discord.com/servers"]
+        self.SEARCH_LIST = ["google.com", "bing.com", "discord.com"]
         self.SEARCH_LIST += [None] * (self.NUM_ENGINES - len(self.SEARCH_LIST))
 
         self.IMAGE_LOAD_LIST = ["google.png", "bing.png"]
@@ -127,7 +127,7 @@ class App(customtkinter.CTk):
             site = "bing.com"
         elif(name == "Discord"):
             picture = "image_icon_light.png"
-            site = "discord.com/servers"
+            site = "discord.com"
         else:
             picture = "image_icon_light.png"
             site = "google.com"
@@ -207,7 +207,11 @@ class App(customtkinter.CTk):
     # The Search Engines
 
     def search(self, engine, query):
-        url = f"https://www.{engine}/search?q={query}"
+        print(engine)
+        if engine == "discord.com":
+            url = f"https://www.{engine}/servers?query={query}"
+        else:
+            url = f"https://www.{engine}/search?q={query}"
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
         }
