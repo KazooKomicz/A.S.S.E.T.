@@ -127,10 +127,10 @@ class App(customtkinter.CTk):
             picture = "bing.png"
             site = "bing.com"
         elif(name == "Discord"):
-            picture = "image_icon_light.png"
+            picture = "discord.png"
             site = "discord.com"
         elif(name == "Reddit"):
-            picture = "image_icon_light.png"
+            picture = "reddit.png"
             site = "reddit.com"
         else:
             picture = "image_icon_light.png"
