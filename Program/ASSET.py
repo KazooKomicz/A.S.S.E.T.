@@ -50,6 +50,7 @@ class App(customtkinter.CTk):
         self.NAME_LIST += ["Default"] * (self.NUM_ENGINES - len(self.NAME_LIST))
 
         self.OPTIONS = []
+        self.optionf = ["Google", "Bing", "Discord", "Reddit"]
 
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
 
@@ -100,7 +101,7 @@ class App(customtkinter.CTk):
             self.options_container.columnconfigure(i, weight=0)
 
             self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
-                                                       values=["Google", "Bing", "Discord", "Reddit"]))
+                                                       values=self.optionf))
             self.OPTIONS[i].grid(row=0, column=i, padx=(40,40), pady=(10, 10))
             self.OPTIONS[i].set("Menu")
 
@@ -195,8 +196,9 @@ class App(customtkinter.CTk):
         for i in range(self.NUM_ENGINES):
             self.options_container.columnconfigure(i, weight=0)
             self.OPTIONS[i].grid(row=0, column=i, padx=0, pady=0)
+            self.OPTIONS[i].set("Menu")
         self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
-                                                       values=["Google", "Bing", "Discord", "Reddit"]))
+                                                       values= self.optionf))
 
 
     def set_Engine(self, name, site, picture):
@@ -208,7 +210,7 @@ class App(customtkinter.CTk):
     def add_Engine(self):
         self.NUM_ENGINES += 1
         self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
-                                                       values=["Default", "Google", "Bing", "Discord"]))
+                                                       values=self.optionf))
         self.OPTIONS[self.NUM_ENGINES].grid(row=0, column=self.NUM_ENGINES, padx=(10, 10), pady=(10, 10))
         self.set_Engine("Default","google.com", "image_icon_light.png")
         self.search_results(self.entry.get())
