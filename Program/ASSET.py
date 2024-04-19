@@ -93,7 +93,7 @@ class App(customtkinter.CTk):
 
         # options container
         self.options_container = customtkinter.CTkFrame(self)
-        self.options_container.grid(row=1, column=1, columnspan=4, padx=0, pady=0, sticky="nsew")
+        self.options_container.grid(row=1, column=1, columnspan=column_width, padx=0, pady=0, sticky="nsew")
         self.options_container.rowconfigure(1, weight=0)
 
         for i in range(self.NUM_ENGINES):
