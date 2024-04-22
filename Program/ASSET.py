@@ -176,8 +176,7 @@ class App(customtkinter.CTk):
     def press_search(self):
         print(self.entry.get())
         self.search_results(self.entry.get())
-    # Changes Mode & Themes
-
+    #Changes the mode of the system (Light, Dark, System Settings)
     def button_Mode(self, mode):
         if(mode == 0):
             customtkinter.set_appearance_mode("Light")
@@ -185,6 +184,7 @@ class App(customtkinter.CTk):
             customtkinter.set_appearance_mode("Dark")
         elif(mode == 2):
             customtkinter.set_appearance_mode("System")
+    #Changes the theme of the system (Blue, Green, Dark Blue)
     def button_Theme(self, theme):
         if (theme == 0):
             customtkinter.set_default_color_theme("blue")
@@ -202,13 +202,13 @@ class App(customtkinter.CTk):
         self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
                                                        values= self.optionf))
 
-
+    #Changes they type of engine set in the column
     def set_Engine(self, name, site, picture):
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
         self.SEARCH_LIST.append(site)
         self.IMAGE_LIST.append(customtkinter.CTkImage(Image.open(os.path.join(image_path, picture)), size=(48, 48)))
         self.NAME_LIST.append(name)
-
+    #Adds a column to the viewport display
     def add_Engine(self):
         self.NUM_ENGINES += 1
         self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
@@ -216,14 +216,13 @@ class App(customtkinter.CTk):
         self.OPTIONS[self.NUM_ENGINES].grid(row=0, column=self.NUM_ENGINES, padx=(10, 10), pady=(10, 10))
         self.set_Engine("Default","google.com", "image_icon_light.png")
         self.search_results(self.entry.get())
-
+    #Removes a column from the viewport display
     def remove_Engine(self):
         # Need to pop engine info from the lists
         self.NUM_ENGINES -= 1
         self.search_results(self.entry.get())
 
-    # The Search Engines
-
+    # The Search Engines (where a query is given which is then sent through to the search engine chosen and grabs the answers)
     def search(self, engine, query):
         print(engine)
         if engine == "discord.com":
