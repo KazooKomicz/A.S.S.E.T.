@@ -199,8 +199,7 @@ class App(customtkinter.CTk):
         for i in range(self.NUM_ENGINES):
             self.options_container.columnconfigure(i, weight=0)
             self.OPTIONS[i].grid(row=0, column=i, padx=0, pady=0)
-        self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
-                                                       values= self.optionf))
+        self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False, values= self.optionf))
 
     #Changes they type of engine set in the column
     def set_Engine(self, name, site, picture):
@@ -211,8 +210,7 @@ class App(customtkinter.CTk):
     #Adds a column to the viewport display
     def add_Engine(self):
         self.NUM_ENGINES += 1
-        self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False,
-                                                       values=self.optionf))
+        self.OPTIONS.append(customtkinter.CTkOptionMenu(self.options_container, dynamic_resizing=False, values=self.optionf))
         self.OPTIONS[self.NUM_ENGINES].grid(row=0, column=self.NUM_ENGINES, padx=(10, 10), pady=(10, 10))
         self.set_Engine("Default","google.com", "image_icon_light.png")
         self.search_results(self.entry.get())
